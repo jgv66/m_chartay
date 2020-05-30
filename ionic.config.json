@@ -1,0 +1,7 @@
+{
+  "name": "m_chartay",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
