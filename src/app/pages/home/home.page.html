@@ -1,0 +1,47 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start" *ngIf=" datos.logeado ">
+            <ion-button (click)="menuToggle()">
+                <ion-icon slot="icon-only" name="menu"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title class="ion-text-center">{{ datos.logeado ? datos?.nombreemp : 'Inicio' }}</ion-title>
+        <!--  -->
+        <ion-buttons slot="end">
+            <ion-button (click)="addToHomeScreen()">
+                <ion-icon slot="icon-only" name="menu" *ngIf=" showInstaller "></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <!--  -->
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-card class="welcome-card" style="margin-top: 10px;">
+        <img src="assets/images/rrhh1.jpg" alt="imagen inicial">
+        <ion-card-header style="padding-top: 10px;padding-bottom: 10px;">
+            <ion-card-title class="ion-text-center" style="font-size: 165%;">Bienvenido a Mandala</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="padding-top: 5px; text-align: justify; font-size: 75% !important; padding-bottom: 5px;">
+            <p>Mandala, te ayudará a simplificar la comunicación con el departamento de Recursos Humanos (RRHH) de tu empresa.</p>
+            <p>Evita solicitar horas, reuniones y pérdidas de tiempo innecesarias, acelera de esta forma trámites en cualquier momento del día laboral o festivo.</p>
+            <ion-row style="font-size: 70%;margin-top: 10px;">
+                <ion-col size="12" *ngIf=" !datos.logeado ">
+                    <ion-button (click)="ingresar()" color="mango" expand="block" size="small">Ingresar a mi Mandala</ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+
+        <img style="margin-bottom: 25px" class="img kntk" src="assets/images/logo-kinetik-gyanet.png" alt="mi_logo">
+
+    </ion-card>
+
+    <button type="button" class="ad2hs-prompt" *ngIf="showButton" (click)="addToHomeScreen()">Instalar aplicación Web</button>
+    <div class="ios-prompt" *ngIf="showIosInstall" (click)="showIosInstall = false;">
+        <span style="color: rgb(187, 187, 187); float: right; margin-top: -10px; margin-right: -7px;">&times;</span>
+        <img src="assets/imgs/add2home.svg" style="float: left; height: 80px; width: auto; margin-top: -4px; margin-right: 1rem;">
+        <p style="margin-top: 0.4rem; line-height: 1.8rem;">Para instalar esta aplicación Web en tu iPhone/iPad presiona <img src="assets/imgs/share.svg" style="display: inline-block; margin-top: 4px; margin-bottom: -4px; height: 20px; width: auto;"> y luego Agregar a Inicio.</p>
+    </div>
+
+</ion-content>

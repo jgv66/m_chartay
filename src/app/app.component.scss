@@ -1,0 +1,12 @@
+.instalar {
+    text-align: none;
+    --border-radius: 5px;
+    --border-width: 1px;
+    --border-style: single;
+}
+
+@media all and (display-mode: standalone) {
+    body {
+        background-color: blueviolet;
+    }
+}
