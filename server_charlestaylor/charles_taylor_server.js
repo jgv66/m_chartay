@@ -928,7 +928,7 @@ app.post('/olvidemiclave',
             .then(empresa => {
                 reg.validarUser(empresa, sqlpool, req.body)
                     .then(function(data) {
-                        enviarCorreoOlvido(req, res, data.datos);
+                        enviarCorreoOlvido(empresa, req, res, data.datos);
                     })
                     .catch(function(err) {
                         console.log("/olvidemiclave ", err);
@@ -939,18 +939,18 @@ app.post('/olvidemiclave',
                 res.json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
             });
     });
-enviarCorreoOlvido = function(req, res, data) {
+enviarCorreoOlvido = function(empresa, req, res, data) {
     //
     sender = htmlCorreos.sender;
     psswrd = htmlCorreos.sender_psw;
     //
-    cTo = archXemp[req.body.empresa].cambios;
+    cTo = archXemp[empresa].cambios;
     cSu = 'Olvidó la Clave de Acceso : ' + data[0].nombres;
     //
     var delBody = htmlCorreos.default_header;
     delBody = delBody.replace('##default_body##', htmlCorreos.olvideclave_body);
     delBody = delBody.replace('##miempresa##', data[0].nombreemp);
-    delBody = delBody.replace('##ficha##', data[0].codigo);
+    delBody = delBody.replace('##ficha##', data[0].ficha);
     delBody = delBody.replace('##rut##', req.body.rut);
     delBody = delBody.replace('##nombres##', data[0].nombres);
     delBody = delBody.replace('##email##', req.body.email);
@@ -983,10 +983,10 @@ enviarCorreoOlvido = function(req, res, data) {
         } else {
             console.log("Email olvido de clave a -> ", cTo);
             //
-            reg.guardaSolicitud(req.body.empresa, sqlpool, data[0].codigo, 'Olvido', 'no recuerdo clave', cTo, '')
+            reg.guardaSolicitud(empresa, sqlpool, data[0].codigo, 'Olvido', 'no recuerdo clave', cTo, '')
                 .then(x => null);
             // concurrencia
-            registraActividad(req.body.empresa, req.body.ficha, 'NoRecuerdoMiClave() -> ' + cTo);
+            registraActividad(empresa, req.body.ficha, 'NoRecuerdoMiClave() -> ' + cTo);
             //                    
             res.json({ resultado: 'ok', mensaje: 'Correo ya se envió a ' + cTo });
             //

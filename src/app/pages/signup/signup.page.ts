@@ -27,7 +27,7 @@ export class SignupPage {
 
   registrar() {
     if ( this.miClave1 === '' || this.miClaveActual === '' ) {
-      this.funciones.msgAlert( '', 'No puede validar ccon claves vacías', 'Correja y reintente.' );
+      this.funciones.msgAlert( '', 'No puede validar con claves vacías', 'Correja y reintente.' );
     } else if ( this.miClave1.length < 6 ) {
       this.funciones.msgAlert( '', 'El largo de su clave debe ser mayor o igual a 6 caracteres. Corrija y reintente.' );
     } else {
@@ -39,10 +39,11 @@ export class SignupPage {
   }
   revisaRespuesta( dev ) {
     this.cargando = false;
-    if ( dev.datos[0].error ) {
-      this.funciones.msgAlert( 'ATENCION', dev.datos[0].mensaje );
-    } else if ( dev.datos[0].resultado ) {
-      this.funciones.msgAlert( 'ATENCION', dev.datos[0].mensaje );
+    // console.log(dev);
+    if ( dev.resultado === 'error' ) {
+      this.funciones.msgAlert( 'ERROR', dev.datos );
+    } else  {
+      this.funciones.msgAlert( '', dev.datos[0].mensaje + ' Ingrese con la nueva clave.' );
       this.router.navigate(['/home']);
     }
   }

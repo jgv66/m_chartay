@@ -170,7 +170,7 @@ module.exports = {
                     <br>
                     <p>Srs. Recursos Humanos: Solicito me envíen mi clave actual ya que no la recuerdo.</p>
                     <br>
-                    <p>Clave actual : <b>##miclave##</b> </p>
+                    <p>Favor enviar, si corresponde, su actual clave: <b>##miclave##</b> </p>
                     <br>
                     <p>Saludos</p>
                     <br>

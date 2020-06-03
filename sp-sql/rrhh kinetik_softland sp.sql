@@ -392,6 +392,7 @@ BEGIN
 				select cast(1 as bit) resultado, cast(0 as bit) error, 
 					k.ficha,sf.nombre,sf.Email,id_empresa,
 					k.supervisor,
+					cast( (case when k.creacion=k.ultimo_ingreso then 1 else 0 end) as bit ) as primeravez,
 					( select top 1 NomB from softland.soempre ) as nombreemp
 				from ktb_usuarios as k with (nolock) 
 				inner join Softland.sw_personal as sf on sf.ficha=k.ficha
