@@ -16,6 +16,7 @@ const routes: Routes =
   { path: 'miscom',         loadChildren: () => import('./pages/miscom/miscom.module')            .then(m => m.MiscomPageModule        ) },
   { path: 'mecambie/:caso', loadChildren: () => import('./pages/mecambie/mecambie.module')        .then(m => m.MecambiePageModule      ) },
   { path: 'cambioclave',    loadChildren: () => import('./pages/signup/signup.module')            .then(m => m.SignupPageModule        ) },
+  { path: 'meolvide',       loadChildren: () => import('./pages/meolvide/meolvide.module')        .then( m => m.MeolvidePageModule     ) },
   // { path: 'asistencia',     loadChildren: () => import('./pages/asistencia/asistencia.module')    .then(m => m.AsistenciaPageModule    ) },
   // { path: 'followme',       loadChildren: () => import('./pages/followme/followme.module')        .then(m => m.FollowmePageModule      ) },
   { path: 'temas',          loadChildren: () => import('./pages/temas/temas.module')              .then(m => m.TemasPageModule         ) },

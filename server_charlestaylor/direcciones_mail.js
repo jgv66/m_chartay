@@ -2,7 +2,7 @@
 module.exports = {
     sender: 'portal@mimandala.cl',
     sender_psw: 'mimandala2020',
-     //
+    //
     default_header: `
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml">
@@ -155,5 +155,26 @@ module.exports = {
                 </td>
             </tr>
         </table>`,
-    // 
+    //
+    olvideclave_body: `
+        <table>
+            <tr>
+                <td class="content">
+                    <br>
+                    <p>Empresa : ##miempresa## </p>
+                    <p>Ficha : ##ficha## </p>
+                    <p>Rut : ##rut##</p>
+                    <p>Nombres : ##nombres## </p>
+                    <p>EMail (señalado por el usuario): ##email## </p>
+                    <p>Celular (señalado por el usuario): ##celular## </p>
+                    <br>
+                    <p>Srs. Recursos Humanos: Solicito me envíen mi clave actual ya que no la recuerdo.</p>
+                    <br>
+                    <p>Clave actual : <b>##miclave##</b> </p>
+                    <br>
+                    <p>Saludos</p>
+                    <br>
+                </td>
+            </tr>
+        </table>`,
 };

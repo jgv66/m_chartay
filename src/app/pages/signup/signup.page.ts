@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatosService } from 'src/app/services/datos.service';
 import { FuncionesService } from 'src/app/services/funciones.service';
@@ -9,7 +8,7 @@ import { FuncionesService } from 'src/app/services/funciones.service';
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
 })
-export class SignupPage implements OnInit {
+export class SignupPage {
 
   miRut    = '';
   miClave1 = '';
@@ -22,12 +21,6 @@ export class SignupPage implements OnInit {
                private router: Router,
                private funciones: FuncionesService) { }
 
-  ngOnInit() {
-    if ( this.datos.ficha === undefined ) {
-      this.router.navigate(['/home']);
-    }
-  }
-
   togglePasswordMode() {
     this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
   }
@@ -35,6 +28,8 @@ export class SignupPage implements OnInit {
   registrar() {
     if ( this.miClave1 === '' || this.miClaveActual === '' ) {
       this.funciones.msgAlert( '', 'No puede validar ccon claves vacías', 'Correja y reintente.' );
+    } else if ( this.miClave1.length < 6 ) {
+      this.funciones.msgAlert( '', 'El largo de su clave debe ser mayor o igual a 6 caracteres. Corrija y reintente.' );
     } else {
       this.cargando = true;
       this.datos.servicioWEB( '/cambiarClave', { rut: this.miRut, claveActual: this.miClaveActual, clave: this.miClave1 } )

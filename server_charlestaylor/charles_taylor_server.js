@@ -138,26 +138,26 @@ app.post('/validarUser',
         //
         getEmpresa(req.body.rut)
             .then(empresa => {
-                    // console.log("/validarUser ", req.body, empresa);
-                    reg.validarUser(empresa, sqlpool, req.body)
-                        .then(function(data) {
-                            // concurrencia
-                            registraActividad(empresa, req.body.rut, 'ingreso al sistema');
-                            //
-                            if (data.resultado === 'ok') {
-                                res.json({ resultado: 'ok', datos: data.datos });
-                            } else {
-                                res.json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
-                            }
-                        })
-                        .catch(function(err) {
-                            // console.log("/validarUser ", err);
-                            res.status(500).json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
-                        });
-                },
-                () => {
-                    res.json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
-                });
+                // console.log("/validarUser ", req.body, empresa);
+                reg.validarUser(empresa, sqlpool, req.body)
+                    .then(function(data) {
+                        // concurrencia
+                        registraActividad(empresa, req.body.rut, 'ingreso al sistema');
+                        //
+                        if (data.resultado === 'ok') {
+                            res.json({ resultado: 'ok', datos: data.datos });
+                        } else {
+                            res.json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
+                        }
+                    })
+                    .catch(function(err) {
+                        // console.log("/validarUser ", err);
+                        res.status(500).json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
+                    });
+            },
+            () => {
+                res.json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
+            });
     });
 
 app.post('/cambiarClave',
@@ -347,6 +347,8 @@ contruyeHTML = function(data, fullpathHTM, empresa) {
             xHTML = xHTML.replace('##logo##', CARPETA_IMG + archXemp[empresa].imagen_cert_antig);
             xHTML = xHTML.replace('##firma##', CARPETA_IMG + archXemp[empresa].firma_cert_antig);
             xHTML = xHTML.replace('##razonsocial##', archXemp[empresa].razon_social_empresa);
+            xHTML = xHTML.replace('##razonsocial##', archXemp[empresa].razon_social_empresa);
+            xHTML = xHTML.replace('##rutempresa##', archXemp[empresa].rut_empresa);
             xHTML = xHTML.replace('##nombre-encargado-rrhh##', archXemp[empresa].nombre_encargado_rrhh);
             xHTML = xHTML.replace('##cargo-encargado-rrhh##', archXemp[empresa].cargo_encargado_rrhh);
             xHTML = xHTML.replace('##direccion_empresa_1##', archXemp[empresa].direccion_empresa_1);
@@ -919,3 +921,75 @@ app.post('/leerGeoPos',
                 res.status(500).json({ resultado: 'error', datos: error });
             });
     });
+
+app.post('/olvidemiclave',
+    function(req, res) {
+        getEmpresa(req.body.rut)
+            .then(empresa => {
+                reg.validarUser(empresa, sqlpool, req.body)
+                    .then(function(data) {
+                        enviarCorreoOlvido(req, res, data.datos);
+                    })
+                    .catch(function(err) {
+                        console.log("/olvidemiclave ", err);
+                        res.status(500).json({ resultado: 'error', datos: err });
+                    });            
+            },
+            () => {
+                res.json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
+            });
+    });
+enviarCorreoOlvido = function(req, res, data) {
+    //
+    sender = htmlCorreos.sender;
+    psswrd = htmlCorreos.sender_psw;
+    //
+    cTo = archXemp[req.body.empresa].cambios;
+    cSu = 'Olvidó la Clave de Acceso : ' + data[0].nombres;
+    //
+    var delBody = htmlCorreos.default_header;
+    delBody = delBody.replace('##default_body##', htmlCorreos.olvideclave_body);
+    delBody = delBody.replace('##miempresa##', data[0].nombreemp);
+    delBody = delBody.replace('##ficha##', data[0].codigo);
+    delBody = delBody.replace('##rut##', req.body.rut);
+    delBody = delBody.replace('##nombres##', data[0].nombres);
+    delBody = delBody.replace('##email##', req.body.email);
+    delBody = delBody.replace('##celular##', req.body.celu);
+    delBody = delBody.replace('##miclave##', data[0].pssw);
+    // cuando envío por gmail
+    // var transporter = nodemailer.createTransport({service: 'Gmail', auth: {user: htmlCorreos.sender, pass: htmlCorreos.sender_psw } });
+    // datos del enviador, original
+    var transporter = nodemailer.createTransport({
+        host: "vps-150899.gloryeta.cl",
+        port: 465,
+        secure: true, // true for 465, false for other ports
+        auth: {
+            user: htmlCorreos.sender,
+            pass: htmlCorreos.sender_psw
+        }
+    });
+    // opciones del correo
+    var mailOptions = {
+        from: { name: "miMandala", address: htmlCorreos.sender },
+        to: cTo,
+        subject: cSu,
+        html: delBody
+    };
+    // enviar el correo
+    transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log('error en sendmail->', error);
+            res.status(500).json({ resultado: 'error', mensaje: error.message });
+        } else {
+            console.log("Email olvido de clave a -> ", cTo);
+            //
+            reg.guardaSolicitud(req.body.empresa, sqlpool, data[0].codigo, 'Olvido', 'no recuerdo clave', cTo, '')
+                .then(x => null);
+            // concurrencia
+            registraActividad(req.body.empresa, req.body.ficha, 'NoRecuerdoMiClave() -> ' + cTo);
+            //                    
+            res.json({ resultado: 'ok', mensaje: 'Correo ya se envió a ' + cTo });
+            //
+        }
+    });
+};

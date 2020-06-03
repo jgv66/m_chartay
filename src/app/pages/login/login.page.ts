@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { ModalController, MenuController } from '@ionic/angular';
 import { DatosService } from '../../services/datos.service';
 import { FuncionesService } from '../../services/funciones.service';
-// import { SignupPage } from '../signup/signup.page';
 
 @Component({
   selector: 'app-login',
@@ -19,8 +18,7 @@ export class LoginPage implements OnInit {
   constructor(private router: Router,
               private menuCtrl: MenuController,
               public datos: DatosService,
-              private funciones: FuncionesService,
-              private modalCtrl: ModalController) { }
+              private funciones: FuncionesService ) {}
 
   ngOnInit() {
     this.datos.leerDato( 'ks_usuario' )
@@ -65,31 +63,32 @@ export class LoginPage implements OnInit {
     } else {
       //
       // console.log(dev.datos);
-      this.datos.ficha     = dev.datos[0].ficha;
-      this.datos.nombre    = dev.datos[0].nombre;
-      this.datos.email     = dev.datos[0].email;
-      this.datos.idempresa = dev.datos[0].id_empresa;
-      this.datos.nombreemp = dev.datos[0].nombreemp;
-      //
-      this.datos.guardarDato( 'ks_usuario', this.miRut );
-      //
-      this.datos.logeado = true;
-      this.router.navigate(['/home']);
-      this.funciones.muestraySale( this.funciones.textoSaludo() + this.datos.nombre, 1, 'middle' );
+      if ( dev.datos[0].primeravez ) {
+        // solicitud Camilo - 02/06/2020
+        // tslint:disable-next-line: quotemark
+        this.funciones.msgAlert('', "Por su seguridad, la primera acción dentro de Mandala debe ser cambiar su clave de acceso. Será direccionado hacia 'Cambiar mi clave'.");
+        this.router.navigate(['/cambioclave']);
+        //
+      } else {
+        //
+        this.datos.ficha     = dev.datos[0].ficha;
+        this.datos.nombre    = dev.datos[0].nombre;
+        this.datos.email     = dev.datos[0].email;
+        this.datos.idempresa = dev.datos[0].id_empresa;
+        this.datos.nombreemp = dev.datos[0].nombreemp;
+        //
+        this.datos.guardarDato( 'ks_usuario', this.miRut );
+        //
+        this.datos.logeado = true;
+        this.router.navigate(['/home']);
+        this.funciones.muestraySale( this.funciones.textoSaludo() + this.datos.nombre, 1, 'middle' );
+      }
       //
     }
   }
 
-  // async iforgot() {
-  //   const modal = await this.modalCtrl.create({
-  //     component: SignupPage
-  //   });
-  //   await modal.present();
-
-  //   const { data } = await modal.onWillDismiss();
-  //   // console.log( data );
-  // }
-
-  iforgot() {}
+  iforgot() {
+    this.router.navigate(['/meolvide']);
+  }
 
 }

@@ -32,9 +32,9 @@ export class MenuComponent implements OnInit {
       children: [
         { title: 'De domicilio',          url: '/mecambie/domicilio', icon: 'pin-outline'         },
         { title: 'De número telefónico',  url: '/mecambie/numero',    icon: 'phone-portrait-outline'        },
-        { title: 'De Afp',                url: '/mecambie/afp',       icon: 'trending-up-outline' },
-        { title: 'De Isapre',             url: '/mecambie/isapre',    icon: 'nuclear-outline'     },
-        { title: 'De clave',              url: '/cambioclave',        icon: 'key-outline'         },
+        { title: 'De AFP',                url: '/mecambie/afp',       icon: 'trending-up-outline' },
+        { title: 'De ISAPRE',             url: '/mecambie/isapre',    icon: 'nuclear-outline'     },
+        { title: 'Clave de acceso',       url: '/cambioclave',        icon: 'key-outline'         },
         // { title: 'De Configuración',      url: '/temas',              icon: 'moon-outline'        },
       ]
     },

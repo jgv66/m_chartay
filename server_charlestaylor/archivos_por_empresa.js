@@ -5,8 +5,9 @@ module.exports = [{
     {
         empresa: 1, // CHARLES TAYLOR
         razon_social_empresa: 'CHARLES TAYLOR CHILE S.A.',
-        nombre_encargado_rrhh: 'Nicol Astudillo',
-        cargo_encargado_rrhh: 'Encargada de Recursos Humanos',
+        rut_empresa: '78.734.200-0',
+        nombre_encargado_rrhh: 'José Ignacio Barriga Ugarte',
+        cargo_encargado_rrhh: 'Gerente General',
         direccion_empresa_1: 'Hendaya 60, Of. 402',
         direccion_empresa_2: 'Santiago, Chile',
         telefonos_empresa: 'Tel. 224704700',
@@ -27,11 +28,12 @@ module.exports = [{
     {
         empresa: 2, // CHARLES TAYLOR AFFINITY
         razon_social_empresa: 'CHARLES TAYLOR AFFINITY CHILE LTDA.',
-        nombre_encargado_rrhh: 'Nicol Astudillo',
-        cargo_encargado_rrhh: 'Encargada de Recursos Humanos',
-        direccion_empresa_1: 'Hendaya 60, Of. 302',
+        rut_empresa: '77.408.820-2',
+        nombre_encargado_rrhh: 'José Ignacio Barriga Ugarte',
+        cargo_encargado_rrhh: 'Gerente General',
+        direccion_empresa_1: ' Phillips 40, Piso 2',
         direccion_empresa_2: 'Santiago, Chile',
-        telefonos_empresa: 'Tel. 224704700',
+        telefonos_empresa: 'Tel. 26363100',
         sitio_web_empresa: 'www.globalrisk.cl',
         imagen_cert_antig: 'affinity.jpg',
         firma_cert_antig: 'affinity_firma.png',
@@ -49,8 +51,9 @@ module.exports = [{
     {
         empresa: 3, // FGR HANNA
         razon_social_empresa: 'FGR HANNA LTDA.',
-        nombre_encargado_rrhh: 'Nicol Astudillo',
-        cargo_encargado_rrhh: 'Encargada de Recursos Humanos',
+        rut_empresa: '(No definido)',
+        nombre_encargado_rrhh: 'José Ignacio Barriga Ugarte',
+        cargo_encargado_rrhh: 'Gerente General',
         direccion_empresa_1: 'Hendaya 60, Of. 302',
         direccion_empresa_2: 'Santiago, Chile',
         telefonos_empresa: 'Tel. 224704700',
