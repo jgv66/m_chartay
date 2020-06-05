@@ -45,6 +45,14 @@ export class MenuComponent implements OnInit {
     //     { title: 'Sígueme',               url: '/followme',   icon: 'walk-outline' },
     //   ]
     // },
+    // {
+    //   title: 'Evaluaciones de Desempeño',
+    //   children: [
+    //     { title: 'Evaluar a mis Pares',  url: '/', icon: ''  },
+    //     { title: 'Evaluar a mis Jefes',  url: '/', icon: ''  },
+    //   ]
+    // },
+    // incorporar encuestas !!!!!
     {
       title: 'Mensajería',
       children: [

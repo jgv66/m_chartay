@@ -72,6 +72,7 @@ export class AppComponent implements OnInit {
       // this.statusBar.styleDefault();
       // this.splashScreen.hide();
       // this.revisarDarkTheme();
+      // setTimeout(() => this.splashScreen.hide(), 500)
       this.checkForPwaToast();
     });
   }
